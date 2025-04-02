@@ -1,7 +1,17 @@
-import { Button, Drawer, Form, Input, InputNumber, message } from "antd";
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import axios from "axios";
 import useMyStore from "../store/my-store";
 import { useEffect, useState } from "react";
+import api from "./Api";
+import { CategoriesType } from "../types/type";
 
 function ProductDrawer({
   editItem,
@@ -17,9 +27,11 @@ function ProductDrawer({
   nomi: string;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
+  const [kategoriyalar, setKategoriyalar] = useState<CategoriesType>([]);
 
   const [form] = Form.useForm();
   const accessToken = useMyStore((state) => state.accessToken);
+  const state = useMyStore();
 
   useEffect(() => {
     if (editItem) {
@@ -28,6 +40,22 @@ function ProductDrawer({
       form.resetFields();
     }
   }, [editItem, isOpen]);
+
+  useEffect(() => {
+    api
+      .get("/api/categories?order=ASC")
+      .then((response) => {
+        setKategoriyalar(response.data.items);
+      })
+      .catch((error) => {
+        if (error.status === 401) {
+          state.logout();
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
@@ -112,11 +140,17 @@ function ProductDrawer({
             <InputNumber placeholder="Aksiya" />
           </Form.Item>
           <Form.Item
-            label="categoryId"
+            label="Kategoriya"
             name="categoryId"
             rules={[{ required: true, message: "categoryId kiriting" }]}
           >
-            <InputNumber />
+            <Select>
+              {kategoriyalar.map((category) => (
+                <Select.Option key={category.id} value={category.id}>
+                  {category.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Image" name="imageUrl">
             <Input placeholder="image joylang" />

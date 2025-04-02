@@ -2,11 +2,57 @@ import { Button, Card, Form, Input, message } from "antd";
 import axios from "axios";
 import { default as UseMyStore } from "../store/my-store";
 import api from "./Api";
+import { useEffect, useState } from "react";
+import pmg_logo from "../assets/logo.png";
+
+const NUM_LOGOS = 30;
+const generateLogos = () => {
+  return Array.from({ length: NUM_LOGOS }, () => ({
+    id: Math.random(),
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * -window.innerHeight,
+    speed: Math.random() * 3 + 2,
+  }));
+};
+
+function FloatingLogos() {
+  const [logos, setLogos] = useState(generateLogos());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLogos((prevLogos) =>
+        prevLogos.map((logo) => ({
+          ...logo,
+          y:
+            logo.y + logo.speed > window.innerHeight
+              ? -50
+              : logo.y + logo.speed,
+        }))
+      );
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <>
+      {logos.map((logo) => (
+        <img
+          key={logo.id}
+          src={pmg_logo}
+          alt="Logo"
+          className="w-10 h-10 fixed opacity-20"
+          style={{ left: `${logo.x}px`, top: `${logo.y}px` }}
+        />
+      ))}
+    </>
+  );
+}
 
 function Login() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md p-6 shadow-lg rounded-2xl bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative overflow-hidden">
+      <FloatingLogos />
+      <Card className="w-full max-w-md p-6 shadow-lg rounded-2xl bg-white relative z-10">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
         <Form
           layout="vertical"
