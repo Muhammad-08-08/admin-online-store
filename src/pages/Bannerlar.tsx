@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, message, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
-import DrawerPage from "../components/UserDrawerPage";
+import BannerDrawer from "../components/BannerDrawer";
 import Loader from "../components/loader";
 import useMyStore from "../store/my-store";
 import { BannerlarType } from "../types/type";
@@ -47,7 +47,7 @@ function Bannerlar() {
     api
       .delete(`/api/banners/${id}`)
       .then(() => {
-        message.success("Mijoz muvaffaqiyatli o'chirildi");
+        message.success("Banner muvaffaqiyatli o'chirildi");
         setBannerlar((prev) => prev.filter((item) => item.id !== id));
       })
       .catch(() => {
@@ -57,7 +57,7 @@ function Bannerlar() {
 
   return (
     <div className="p-6 w-full h-[640px] border-b border-b-gray-300 bg-white rounded-lg overflow-y-auto">
-      <DrawerPage
+      <BannerDrawer
         nomi="Bannerlar"
         editItem={selectedUser}
         setIsOpen={setIsOpen}
@@ -80,8 +80,26 @@ function Bannerlar() {
             title: "isActive",
             dataIndex: "isActive",
             key: "isActive",
-            render: (isActive) => {
-              return <Switch checked={isActive} />;
+            render: (isActive, record) => {
+              const handleToggle = (checked: boolean) => {
+                setBannerlar((prev) =>
+                  prev.map((item) =>
+                    item.id === record.id
+                      ? { ...item, isActive: checked }
+                      : item
+                  )
+                );
+
+                api
+                  .patch(`/api/banners/${record.id}`, { isActive: checked })
+                  .then(() => {
+                    message.success(`Banner holati yangilandi`);
+                  })
+                  .catch(() => {
+                    message.error(`Xatolik yuz berdi`);
+                  });
+              };
+              return <Switch checked={isActive} onChange={handleToggle} />;
             },
           },
           {
@@ -98,8 +116,8 @@ function Bannerlar() {
           },
           {
             title: "image",
-            dataIndex: "image",
-            key: "image",
+            dataIndex: "imageUrl",
+            key: "imageUrl",
             render: (image) => {
               return <img width={50} src={image} alt="img" />;
             },

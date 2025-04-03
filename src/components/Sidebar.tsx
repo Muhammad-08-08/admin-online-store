@@ -15,8 +15,8 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
 
   return (
     <div
-      className="h-[89vh] bg-gray-900 text-white shadow-lg overflow-hidden transition-all duration-300 select-none"
-      style={{ width: collapsed ? 80 : 200 }}
+      className="h-screen bg-gray-900 text-white shadow-lg transition-all duration-300 select-none overflow-y-auto"
+      style={{ width: collapsed ? 80 : 250 }}
     >
       <Menu
         className="px-4 py-6"
