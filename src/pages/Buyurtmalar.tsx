@@ -1,14 +1,12 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, message, Table } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../components/Api";
 import ProductDrawer from "../components/ProductDrawer";
 import Loader from "../components/loader";
-import useMyStore from "../store/my-store";
 import { BuyurtmalarType } from "../types/type";
 
 function Buyurtmalar() {
-  const accessToken = useMyStore((state) => state.accessToken);
   const [Buyurtmalar, setBuyurtmalar] = useState<BuyurtmalarType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Object>();
@@ -16,12 +14,8 @@ function Buyurtmalar() {
 
   const users = () => {
     setLoading(true);
-    axios
-      .get("https://nt.softly.uz/api/orders?limit=10&page=1&order=ASC", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .get("/api/orders?order=ASC")
       .then((response) => {
         setBuyurtmalar(response.data);
       })
@@ -43,12 +37,8 @@ function Buyurtmalar() {
   }
 
   function onDeleted(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .delete(`/api/products/${id}`)
       .then(() => {
         message.success("Mahsulot muvaffaqiyatli o‘chirildi");
 

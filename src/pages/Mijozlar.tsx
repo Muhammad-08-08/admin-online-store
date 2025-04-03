@@ -1,15 +1,13 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, message, Table } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../components/Api";
 import DrawerPage from "../components/UserDrawerPage";
 import Loader from "../components/loader";
 import useMyStore from "../store/my-store";
 import { MijozlarType } from "../types/type";
-import api from "../components/Api";
 
 function Mijozlar() {
-  const accessToken = useMyStore((state) => state.accessToken);
   const state = useMyStore();
   const [mijozlar, setMijozlar] = useState<MijozlarType>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,12 +50,8 @@ function Mijozlar() {
       return message.error("Admin foydalanuvchini o'chirish mumkin emas");
     }
 
-    axios
-      .delete(`https://nt.softly.uz/api/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .delete(`/api/users/${id}`)
       .then(() => {
         message.success("Mijoz muvaffaqiyatli o'chirildi");
         setMijozlar((prev) => prev.filter((item) => item.id !== id));

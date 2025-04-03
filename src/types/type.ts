@@ -49,3 +49,11 @@ export type CategoriesType = {
   description: string;
   createdAt: string;
 }[];
+
+export type BannerlarType = {
+  id: number;
+  title: string;
+  imageUrl: string;
+  isActive: boolean;
+  createdAt: string;
+}[];

@@ -1,29 +1,34 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, message, Table } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../components/Api";
 import ProductDrawer from "../components/ProductDrawer";
 import Loader from "../components/loader";
-import useMyStore from "../store/my-store";
-import { ProductlarType } from "../types/type";
+import { CategoriesType, ProductlarType } from "../types/type";
 
 function Productlar() {
-  const accessToken = useMyStore((state) => state.accessToken);
-  const [Productlar, setProductlar] = useState<ProductlarType>([]);
+  const [productlar, setProductlar] = useState<ProductlarType>([]);
+  const [category, setCategory] = useState<CategoriesType>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Object>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const users = () => {
     setLoading(true);
-    axios
-      .get("https://nt.softly.uz/api/products?order=ASC", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .get("/api/products?order=ASC")
       .then((response) => {
         setProductlar(response.data.items);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    api
+      .get("/api/categories?order=ASC")
+      .then((response) => {
+        setCategory(response.data.items);
+        console.log(response.data);
       })
       .finally(() => {
         setLoading(false);
@@ -43,12 +48,8 @@ function Productlar() {
   }
 
   function onDeleted(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .delete(`/api/products/${id}`)
       .then(() => {
         message.success("Mahsulot muvaffaqiyatli o'chirildi");
         setProductlar((prev) => prev.filter((item) => item.id !== id));
@@ -83,6 +84,15 @@ function Productlar() {
             title: "Price",
             dataIndex: "price",
             key: "price",
+          },
+          {
+            title: "categoryId",
+            dataIndex: "categoryId",
+            key: "categoryId",
+            render: (id) => {
+              const nomini_chiqarish = category.find((item) => item.id === id);
+              return <p>{nomini_chiqarish?.name}</p>;
+            },
           },
           {
             title: "Yaratilgan sana",
@@ -127,7 +137,7 @@ function Productlar() {
             },
           },
         ]}
-        dataSource={Productlar}
+        dataSource={productlar}
         rowKey="id"
         pagination={{ pageSize: 10 }}
         className="w-full"
