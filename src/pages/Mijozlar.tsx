@@ -3,7 +3,6 @@ import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import DrawerPage from "../components/UserDrawerPage";
-import Loader from "../components/loader";
 import useMyStore from "../store/my-store";
 import { MijozlarType } from "../types/type";
 
@@ -35,14 +34,6 @@ function Mijozlar() {
     users();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed w-[100vw] h-[100vh] bg-white flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   function onDeleted(id: number) {
     const user = mijozlar.find((item) => item.id === id);
 
@@ -71,6 +62,7 @@ function Mijozlar() {
         refresh={users}
       />
       <Table
+        loading={loading}
         columns={[
           {
             title: "ID",

@@ -3,7 +3,6 @@ import { Button, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import CategoriesDrawer from "../components/CategoriesDrawer";
-import Loader from "../components/loader";
 import useMyStore from "../store/my-store";
 import { CategoriesType } from "../types/type";
 
@@ -35,14 +34,6 @@ function Kategoriyalar() {
     users();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed w-[100vw] h-[100vh] bg-white flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   function onDeleted(id: number) {
     api
       .delete(`/api/categories/${id}`)
@@ -65,6 +56,7 @@ function Kategoriyalar() {
         refresh={users}
       />
       <Table
+        loading={loading}
         columns={[
           {
             title: "ID",

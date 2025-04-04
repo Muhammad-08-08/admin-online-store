@@ -3,7 +3,6 @@ import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import ProductDrawer from "../components/ProductDrawer";
-import Loader from "../components/loader";
 import { CategoriesType, ProductlarType } from "../types/type";
 
 function Productlar() {
@@ -39,14 +38,6 @@ function Productlar() {
     users();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed w-[100vw] h-[100vh] bg-white flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   function onDeleted(id: number) {
     api
       .delete(`/api/products/${id}`)
@@ -69,6 +60,7 @@ function Productlar() {
         refresh={users}
       />
       <Table
+        loading={loading}
         columns={[
           {
             title: "ID",

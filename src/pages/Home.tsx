@@ -15,11 +15,14 @@ function Home() {
     { label: "Total Users", value: dashboard?.totalUsers },
     { label: "Total Orders", value: dashboard?.totalOrders },
     { label: "Total Products", value: dashboard?.totalProducts },
-    { label: "Total Revenue", value: `$${dashboard?.totalRevenue}` },
+    {
+      label: "Total Revenue",
+      value: `$${Number(dashboard?.totalRevenue).toLocaleString("ru")}`,
+    },
   ];
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6 bg-gray-50 h-[620px] border-b overflow-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <div

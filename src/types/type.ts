@@ -19,25 +19,25 @@ export type ProductlarType = {
   imageUrl: string;
 }[];
 
+export type OrderProduct = {
+  id: number;
+  orderId: number;
+  productId: number;
+  quantity: number;
+  price: number;
+};
+
+export type BuyurtmalarItemType = {
+  id: number;
+  customerId: number;
+  totalPrice: number;
+  status: "pending" | "processing" | "delivered" | "cancelled";
+  createdAt: string;
+  items: OrderProduct[];
+};
+
 export type BuyurtmalarType = {
-  items: [
-    {
-      id: number;
-      customerId: number;
-      totalPrice: number;
-      status: string;
-      createdAt: string;
-      items: [
-        {
-          id: number;
-          orderId: number;
-          productId: number;
-          quantity: number;
-          price: number;
-        }
-      ];
-    }
-  ];
+  items: BuyurtmalarItemType[];
   total: number;
   page: number;
   message: string;

@@ -3,7 +3,6 @@ import { Button, Image, message, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import BannerDrawer from "../components/BannerDrawer";
-import Loader from "../components/loader";
 import useMyStore from "../store/my-store";
 import { BannerlarType } from "../types/type";
 
@@ -35,14 +34,6 @@ function Bannerlar() {
     users();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed w-[100vw] h-[100vh] bg-white flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   function onDeleted(id: number) {
     api
       .delete(`/api/banners/${id}`)
@@ -65,6 +56,7 @@ function Bannerlar() {
         refresh={users}
       />
       <Table
+        loading={loading}
         columns={[
           {
             title: "ID",

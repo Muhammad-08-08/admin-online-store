@@ -136,8 +136,8 @@ function ProductDrawer({
           <Form.Item label="description" name="description">
             <Input placeholder="Tarif bering" />
           </Form.Item>
-          <Form.Item label="Aksiya" name="stock" rules={[{ required: true }]}>
-            <InputNumber placeholder="Aksiya" />
+          <Form.Item label="Stock" name="stock" rules={[{ required: true }]}>
+            <InputNumber placeholder="Stock" />
           </Form.Item>
           <Form.Item
             label="Kategoriya"
