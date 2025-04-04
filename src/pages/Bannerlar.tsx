@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, message, Switch, Table } from "antd";
+import { Button, Image, message, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import BannerDrawer from "../components/BannerDrawer";
@@ -119,7 +119,18 @@ function Bannerlar() {
             dataIndex: "imageUrl",
             key: "imageUrl",
             render: (image) => {
-              return <img width={50} src={image} alt="img" />;
+              return (
+                <div>
+                  <Image
+                    width={70}
+                    height={50}
+                    src={image}
+                    placeholder={
+                      <Image preview={false} src={image} width={200} />
+                    }
+                  />
+                </div>
+              );
             },
           },
           {

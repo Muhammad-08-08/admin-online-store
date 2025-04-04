@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, message, Table } from "antd";
+import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import ProductDrawer from "../components/ProductDrawer";
@@ -111,7 +111,18 @@ function Productlar() {
             dataIndex: "imageUrl",
             key: "imageUrl",
             render: (imageUrl) => {
-              return <img className="w-20 h-12" src={imageUrl} alt="img" />;
+              return (
+                <div>
+                  <Image
+                    width={70}
+                    height={50}
+                    src={imageUrl}
+                    placeholder={
+                      <Image preview={false} src={imageUrl} width={200} />
+                    }
+                  />
+                </div>
+              );
             },
           },
           {

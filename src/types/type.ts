@@ -57,3 +57,17 @@ export type BannerlarType = {
   isActive: boolean;
   createdAt: string;
 }[];
+
+export type DashboardType = {
+  totalUsers: string;
+  totalOrders: string;
+  totalProducts: string;
+  totalRevenue: string;
+  recentOrders: {
+    id: number;
+    customerId: number;
+    totalPrice: number;
+    status: string;
+    createdAt: string;
+  }[];
+};

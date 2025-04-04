@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, message, Table } from "antd";
+import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../components/Api";
 import DrawerPage from "../components/UserDrawerPage";
@@ -109,7 +109,18 @@ function Mijozlar() {
             dataIndex: "image",
             key: "image",
             render: (image) => {
-              return <img width={50} src={image} alt="img" />;
+              return (
+                <div>
+                  <Image
+                    width={70}
+                    height={50}
+                    src={image}
+                    placeholder={
+                      <Image preview={false} src={image} width={200} />
+                    }
+                  />
+                </div>
+              );
             },
           },
           {
