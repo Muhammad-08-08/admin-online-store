@@ -20,7 +20,6 @@ function Home() {
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Top Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <div
@@ -39,7 +38,6 @@ function Home() {
         ))}
       </div>
 
-      {/* Recent Orders */}
       <div>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Recent Orders
