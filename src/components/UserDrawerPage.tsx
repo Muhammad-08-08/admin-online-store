@@ -1,7 +1,7 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import useMyStore from "../store/my-store";
+import MijozlarApi from "../api/Mijozlar";
 
 function DrawerPage({
   nomi,
@@ -19,7 +19,6 @@ function DrawerPage({
   const [loading, setLoading] = useState<boolean>(false);
 
   const [form] = Form.useForm();
-  const accessToken = useMyStore((state) => state.accessToken);
 
   useEffect(() => {
     if (editItem) {
@@ -29,8 +28,10 @@ function DrawerPage({
     }
   }, [editItem, isOpen]);
 
-  function handleSubmit(values: any) {
+  async function handleSubmit(values: any) {
     setLoading(true);
+    console.log(values);
+
     const userData = {
       name: values.name,
       email: values.email,
@@ -38,40 +39,26 @@ function DrawerPage({
       role: values.role || "customer",
       image: values.image || "",
     };
-
-    const url = editItem?.id
-      ? `https://nt.softly.uz/api/users/${editItem.id}`
-      : `https://nt.softly.uz/api/users`;
-    const method = editItem?.id ? "PATCH" : "post";
-
-    axios({
-      url: url,
-      method: method,
-      data: userData,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        message.success(
-          editItem?.id
-            ? "Mijoz muvaffaqiyatli yangilandi"
-            : "Mijoz muvaffaqiyatli qo'shildi"
-        );
-        setIsOpen(false);
-        refresh();
-        form.resetFields();
-      })
-      .catch((error) => {
-        if (error.response?.status === 409) {
-          message.error("Bu mijoz oldin qo'shilgan");
-        } else {
-          message.error("Mijozni saqlashda xatolik");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      if (editItem?.id) {
+        await MijozlarApi.update(editItem.id, userData);
+        message.success("Mijoz muvaffaqiyatli yangilandi");
+      } else {
+        await MijozlarApi.create(userData);
+        message.success("Mijoz muvaffaqiyatli qo'shildi");
+      }
+      setIsOpen(false);
+      refresh();
+      form.resetFields();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        message.error("Bu mijoz oldin qo'shilgan");
+      } else {
+        message.error("Mijozni saqlashda xatolik" + error);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

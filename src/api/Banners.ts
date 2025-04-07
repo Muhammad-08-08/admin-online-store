@@ -1,18 +1,28 @@
 import api from "./Api";
 
-const BannersApi = {
-  getAll: (params: { order: string }) => {
-    return api.get("/api/banners", {
-      params: params,
-    });
+const BannerApi = {
+  getAll: (params?: { order?: string }) => {
+    return api.get("/api/banners", { params });
   },
 
-  delete: (id: { id: number }) => {
-    return api.delete(`/api/banners${id}`);
+  create: (data: { title: string; imageUrl: string; isActive: boolean }) => {
+    return api.post("/api/banners", data);
   },
 
-  postAll: () => {
-    return api.patch("/api/banners");
+  update: (
+    id: number,
+    data: {
+      title: string;
+      imageUrl: string;
+      isActive: boolean;
+    }
+  ) => {
+    return api.patch(`/api/banners/${id}`, data);
+  },
+
+  delete: (id: number) => {
+    return api.delete(`/api/banners/${id}`);
   },
 };
-export default BannersApi;
+
+export default BannerApi;

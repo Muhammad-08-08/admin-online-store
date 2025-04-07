@@ -14,7 +14,7 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto">
+    <div>
       {login ? (
         <div>
           <Navbar toggleCollapsed={toggleCollapsed} collapsed={collapsed} />

@@ -2,14 +2,12 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Image, message, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../api/Api";
-import BannerDrawer from "../components/BannerDrawer";
-import useMyStore from "../store/my-store";
-import { BannerlarType } from "../types/type";
 import BannersApi from "../api/Banners";
 import MijozlarApi from "../api/Mijozlar";
+import BannerDrawer from "../components/BannerDrawer";
+import { BannerlarType } from "../types/type";
 
 function Bannerlar() {
-  const state = useMyStore();
   const [bannerlar, setBannerlar] = useState<BannerlarType>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Object>();
@@ -22,9 +20,7 @@ function Bannerlar() {
         setBannerlar(response.data.items);
       })
       .catch((error) => {
-        if (error.status === 401) {
-          state.logout();
-        }
+        message.error("Xatolik yuzaga keldi" + error);
       })
       .finally(() => {
         setLoading(false);
@@ -36,13 +32,17 @@ function Bannerlar() {
   }, []);
 
   function onDeleted(id: number) {
-    MijozlarApi.delete({ id })
+    setLoading(true);
+    MijozlarApi.delete(id)
       .then(() => {
         message.success("Banner muvaffaqiyatli o'chirildi");
         setBannerlar((prev) => prev.filter((item) => item.id !== id));
       })
       .catch(() => {
         message.error("O'chirishda xatolik yuz berdi");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 

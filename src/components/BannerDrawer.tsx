@@ -1,7 +1,6 @@
 import { Button, Drawer, Form, Input, message, Switch } from "antd";
 import { useEffect, useState } from "react";
-import api from "../api/Api";
-import useMyStore from "../store/my-store";
+import BannerApi from "../api/Banners";
 
 function BannerDrawer({
   nomi,
@@ -19,7 +18,6 @@ function BannerDrawer({
   const [loading, setLoading] = useState<boolean>(false);
 
   const [form] = Form.useForm();
-  const accessToken = useMyStore((state) => state.accessToken);
 
   useEffect(() => {
     if (editItem) {
@@ -30,42 +28,33 @@ function BannerDrawer({
     }
   }, [editItem, isOpen]);
 
-  function handleSubmit(values: any) {
+  const handleSubmit = async (values: any) => {
     setLoading(true);
+
     const userData = {
       title: values.title,
       imageUrl: values.imageUrl,
       isActive: values.isActive === true,
     };
 
-    const method = editItem?.id ? "PATCH" : "post";
+    try {
+      if (editItem?.id) {
+        await BannerApi.update(editItem.id, userData);
+        message.success("Banner muvaffaqiyatli yangilandi");
+      } else {
+        await BannerApi.create(userData);
+        message.success("Banner muvaffaqiyatli qo'shildi");
+      }
 
-    api({
-      url: editItem?.id ? `/api/banners/${editItem.id}` : `/api/banners`,
-      method: method,
-      data: userData,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        message.success(
-          editItem?.id
-            ? "Banner muvaffaqiyatli yangilandi"
-            : "Banner muvaffaqiyatli qo'shildi"
-        );
-        form.resetFields();
-        setIsOpen(false);
-        refresh();
-      })
-      .catch(() => {
-        message.error("Bannerni saqlashda xatolik");
-      })
-      .finally(() => {
-        setLoading(false);
-        form.resetFields();
-      });
-  }
+      form.resetFields();
+      setIsOpen(false);
+      refresh();
+    } catch (error) {
+      message.error("Bannerni saqlashda xatolik");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>

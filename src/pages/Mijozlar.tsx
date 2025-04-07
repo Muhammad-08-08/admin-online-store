@@ -34,19 +34,23 @@ function Mijozlar() {
   }, []);
 
   function onDeleted(id: number) {
+    setLoading(true);
     const user = mijozlar.find((item) => item.id === id);
 
     if (user?.role === "admin") {
       return message.error("Admin foydalanuvchini o'chirish mumkin emas");
     }
 
-    MijozlarApi.delete({id})
+    MijozlarApi.delete(id)
       .then(() => {
         message.success("Mijoz muvaffaqiyatli o'chirildi");
         setMijozlar((prev) => prev.filter((item) => item.id !== id));
       })
       .catch(() => {
         message.error("O'chirishda xatolik yuz berdi");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
