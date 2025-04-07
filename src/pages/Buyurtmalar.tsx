@@ -11,7 +11,7 @@ import {
 } from "../types/type";
 
 function Buyurtmalar() {
-  const [buyurtmalar, setBuyurtmalar] = useState<BuyurtmalarType | null>(null);
+  const [buyurtmalar, setBuyurtmalar] = useState<BuyurtmalarType>();
   const [mijozlar, setMijozlar] = useState<MijozlarType>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<BuyurtmalarItemType | null>(
