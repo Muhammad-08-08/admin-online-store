@@ -97,7 +97,7 @@ function Buyurtmalar() {
               return (
                 <ul>
                   {items.map((item, idx) => (
-                    <li key={idx}>{item.price.toLocaleString("ru")} so‘m</li>
+                    <li key={idx}>{item.productId}</li>
                   ))}
                 </ul>
               );
