@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
-import api from "../api/Api";
+import MijozlarApi from "../api/Mijozlar";
 import DrawerPage from "../components/UserDrawerPage";
 import useMyStore from "../store/my-store";
 import { MijozlarType } from "../types/type";
@@ -15,8 +15,7 @@ function Mijozlar() {
 
   const users = () => {
     setLoading(true);
-    api
-      .get("/api/users?order=ASC")
+    MijozlarApi.getAll({ order: "ASC" })
       .then((response) => {
         setMijozlar(response.data.items);
       })
@@ -41,8 +40,7 @@ function Mijozlar() {
       return message.error("Admin foydalanuvchini o'chirish mumkin emas");
     }
 
-    api
-      .delete(`/api/users/${id}`)
+    MijozlarApi.delete({id})
       .then(() => {
         message.success("Mijoz muvaffaqiyatli o'chirildi");
         setMijozlar((prev) => prev.filter((item) => item.id !== id));

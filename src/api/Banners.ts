@@ -6,5 +6,13 @@ const BannersApi = {
       params: params,
     });
   },
+
+  delete: (id: { id: number }) => {
+    return api.delete(`/api/banners${id}`);
+  },
+
+  postAll: () => {
+    return api.patch("/api/banners");
+  },
 };
 export default BannersApi;

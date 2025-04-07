@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, Input, message, Switch } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../api/Api";
 import useMyStore from "../store/my-store";
 
 function BannerDrawer({
@@ -38,13 +38,10 @@ function BannerDrawer({
       isActive: values.isActive === true,
     };
 
-    const url = editItem?.id
-      ? `https://nt.softly.uz/api/banners/${editItem.id}`
-      : `https://nt.softly.uz/api/banners`;
     const method = editItem?.id ? "PATCH" : "post";
 
-    axios({
-      url: url,
+    api({
+      url: editItem?.id ? `/api/banners/${editItem.id}` : `/api/banners`,
       method: method,
       data: userData,
       headers: {

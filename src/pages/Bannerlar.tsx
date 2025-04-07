@@ -6,6 +6,7 @@ import BannerDrawer from "../components/BannerDrawer";
 import useMyStore from "../store/my-store";
 import { BannerlarType } from "../types/type";
 import BannersApi from "../api/Banners";
+import MijozlarApi from "../api/Mijozlar";
 
 function Bannerlar() {
   const state = useMyStore();
@@ -35,8 +36,7 @@ function Bannerlar() {
   }, []);
 
   function onDeleted(id: number) {
-    api
-      .delete(`/api/banners/${id}`)
+    MijozlarApi.delete({ id })
       .then(() => {
         message.success("Banner muvaffaqiyatli o'chirildi");
         setBannerlar((prev) => prev.filter((item) => item.id !== id));
