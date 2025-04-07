@@ -38,15 +38,17 @@ function OrdersDrawer({
     console.log(values);
 
     const method = editItem ? "patch" : "post";
-    const ordersData = {
-      customerId: values.customerId,
-      items: [
-        {
-          productId: values.productId,
-          quantity: values.quantity,
-        },
-      ],
-    };
+    const ordersData = editItem
+      ? { status: values.status || "pending" }
+      : {
+          customerId: values.customerId,
+          items: [
+            {
+              productId: values.productId,
+              quantity: values.quantity,
+            },
+          ],
+        };
 
     api({
       url: editItem ? `/api/orders/${editItem.id}` : "/api/orders",
