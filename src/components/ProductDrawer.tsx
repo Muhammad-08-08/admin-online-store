@@ -22,7 +22,7 @@ function ProductDrawer({
 }: {
   editItem?: any;
   setIsOpen: any;
-  refresh: any;
+  refresh: () => void;
   isOpen: boolean;
   nomi: string;
 }) {

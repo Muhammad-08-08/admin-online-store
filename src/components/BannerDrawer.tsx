@@ -14,7 +14,7 @@ function BannerDrawer({
   editItem?: any;
   isOpen: boolean;
   setIsOpen: any;
-  refresh: any;
+  refresh: () => void;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -59,7 +59,7 @@ function BannerDrawer({
         );
         form.resetFields();
         setIsOpen(false);
-        refresh?.();
+        refresh();
       })
       .catch(() => {
         message.error("Bannerni saqlashda xatolik");

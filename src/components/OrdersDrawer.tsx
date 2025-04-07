@@ -14,7 +14,7 @@ function OrdersDrawer({
   nomi: string;
   setIsOpen: any;
   isOpen: boolean;
-  refresh: any;
+  refresh: () => void;
 }) {
   const [form] = Form.useForm();
   const [product, setProduct] = useState<ProductlarType>([]);
@@ -62,7 +62,7 @@ function OrdersDrawer({
             : "Buyurtma muvaffaqiyatli qo'shildi"
         );
         form.resetFields();
-        refresh?.();
+        refresh();
         setIsOpen(false);
       })
       .catch(() => {

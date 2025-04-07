@@ -14,7 +14,7 @@ function CategoriesDrawer({
   editItem?: any;
   isOpen: boolean;
   setIsOpen: any;
-  refresh: any;
+  refresh: () => void;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -56,7 +56,7 @@ function CategoriesDrawer({
             : "kategoriya muvaffaqiyatli qo'shildi"
         );
         setIsOpen(false);
-        refresh?.();
+        refresh();
         form.resetFields();
       })
       .catch((error) => {
