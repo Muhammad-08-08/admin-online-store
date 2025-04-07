@@ -1,7 +1,7 @@
 import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
 import { useEffect, useState } from "react";
 import { MijozlarType, ProductlarType } from "../types/type";
-import api from "./Api";
+import api from "../api/Api";
 
 function OrdersDrawer({
   editItem,

@@ -1,10 +1,11 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Image, message, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
-import api from "../components/Api";
+import api from "../api/Api";
 import BannerDrawer from "../components/BannerDrawer";
 import useMyStore from "../store/my-store";
 import { BannerlarType } from "../types/type";
+import BannersApi from "../api/Banners";
 
 function Bannerlar() {
   const state = useMyStore();
@@ -15,8 +16,7 @@ function Bannerlar() {
 
   const users = () => {
     setLoading(true);
-    api
-      .get("/api/banners?order=ASC")
+    BannersApi.getAll({ order: "ASC" })
       .then((response) => {
         setBannerlar(response.data.items);
       })

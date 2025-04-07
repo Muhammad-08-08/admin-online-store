@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
-import api from "../components/Api";
+import api from "../api/Api";
 import ProductDrawer from "../components/ProductDrawer";
 import { CategoriesType, ProductlarType } from "../types/type";
 

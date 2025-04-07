@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import api from "../components/Api";
+import api from "../api/Api";
 
 type MyStoreType = {
   user: string | null;

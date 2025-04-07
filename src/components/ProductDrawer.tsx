@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import useMyStore from "../store/my-store";
 import { useEffect, useState } from "react";
-import api from "./Api";
+import api from "../api/Api";
 import { CategoriesType } from "../types/type";
 
 function ProductDrawer({

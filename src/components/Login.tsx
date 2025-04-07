@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, message } from "antd";
 import axios from "axios";
 import { default as UseMyStore } from "../store/my-store";
-import api from "./Api";
+import api from "../api/Api";
 import { useEffect, useState } from "react";
 import pmg_logo from "../assets/logo.png";
 

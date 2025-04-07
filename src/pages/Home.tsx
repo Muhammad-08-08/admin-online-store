@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../components/Api";
+import api from "../api/Api";
 import { DashboardType } from "../types/type";
 
 function Home() {
