@@ -57,7 +57,7 @@ function ProductDrawer({
       });
   }, []);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = (values: any) => {
     setLoading(true);
     const url = editItem?.id
       ? `https://nt.softly.uz/api/products/${editItem.id}`
@@ -75,33 +75,34 @@ function ProductDrawer({
 
     console.log("📤 Jo'natilayotgan ma'lumot:", productData);
 
-    try {
-      const response = await axios({
-        method,
-        url,
-        data: productData,
-        headers: { Authorization: `Bearer ${accessToken}` },
+    axios({
+      method,
+      url,
+      data: productData,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then((response) => {
+        console.log("✅ Serverdan kelgan javob:", response.data);
+
+        message.success(
+          editItem?.id
+            ? "Mahsulot muvaffaqiyatli yangilandi"
+            : "Mahsulot muvaffaqiyatli qo'shildi"
+        );
+        refresh?.();
+        setIsOpen(false);
+        form.resetFields();
+      })
+      .catch((error) => {
+        console.error("❌ Xatolik:", error.response?.data || error.message);
+        message.error(
+          error.response?.data?.message ||
+            "Xatolik yuz berdi, qayta urinib ko‘ring!"
+        );
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-      console.log("✅ Serverdan kelgan javob:", response.data);
-
-      message.success(
-        editItem?.id
-          ? "Mahsulot muvaffaqiyatli yangilandi"
-          : "Mahsulot muvaffaqiyatli qo'shildi"
-      );
-      refresh?.();
-      setIsOpen(false);
-      form.resetFields();
-    } catch (error: any) {
-      console.error("❌ Xatolik:", error.response?.data || error.message);
-      message.error(
-        error.response?.data?.message ||
-          "Xatolik yuz berdi, qayta urinib ko‘ring!"
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (

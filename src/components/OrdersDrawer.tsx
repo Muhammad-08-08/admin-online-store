@@ -1,7 +1,5 @@
 import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import useMyStore from "../store/my-store";
 import { MijozlarType, ProductlarType } from "../types/type";
 import api from "./Api";
 
@@ -18,7 +16,6 @@ function OrdersDrawer({
   isOpen: boolean;
   refresh: any;
 }) {
-  const accessToken = useMyStore((state) => state.accessToken);
   const [form] = Form.useForm();
   const [product, setProduct] = useState<ProductlarType>([]);
   const [user, setUser] = useState<MijozlarType>([]);
@@ -35,16 +32,14 @@ function OrdersDrawer({
     } else {
       form.resetFields();
     }
-  }, [editItem]);
+  }, [editItem, form]);
 
   const handleSubmit = (values: any) => {
-    const url = editItem
-      ? `https://nt.softly.uz/api/orders/${editItem.id}`
-      : "https://nt.softly.uz/api/orders";
+    console.log(values);
+
     const method = editItem ? "patch" : "post";
     const ordersData = {
       customerId: values.customerId,
-      status: values.status,
       items: [
         {
           productId: values.productId,
@@ -53,11 +48,10 @@ function OrdersDrawer({
       ],
     };
 
-    axios({
-      url: url,
+    api({
+      url: editItem ? `/api/orders/${editItem.id}` : "/api/orders",
       method: method,
       data: ordersData,
-      headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then(() => {
         message.success(
@@ -84,13 +78,6 @@ function OrdersDrawer({
     });
   }, []);
 
-  const statusOptions = [
-    { label: "Pending", value: "pending" },
-    { label: "Processing", value: "processing" },
-    { label: "Delivered", value: "delivered" },
-    { label: "Cancelled", value: "cancelled" },
-  ];
-
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -99,16 +86,26 @@ function OrdersDrawer({
           {editItem ? "Tahrirlash" : "Qo'shish"}
         </Button>
       </div>
-      <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
+      <Drawer open={isOpen} onClose={() => setIsOpen(false)} destroyOnClose>
         <Form layout="vertical" form={form} onFinish={handleSubmit}>
           {editItem ? (
-            <Form.Item
-              name="status"
-              label="Buyurtma statusi"
-              rules={[{ required: true, message: "Status tanlang" }]}
-            >
-              <Select placeholder="Statusni tanlang" options={statusOptions} />
-            </Form.Item>
+            <>
+              <Form.Item
+                name="status"
+                label="Buyurtma statusi"
+                rules={[{ required: true, message: "Status tanlang" }]}
+              >
+                <Select
+                  placeholder="Statusni tanlang"
+                  options={[
+                    { label: "pending", value: "pending" },
+                    { label: "processing", value: "processing" },
+                    { label: "delivered", value: "delivered" },
+                    { label: "cancelled", value: "cancelled" },
+                  ]}
+                />
+              </Form.Item>
+            </>
           ) : (
             <>
               <Form.Item
